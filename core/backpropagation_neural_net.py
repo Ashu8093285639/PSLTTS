@@ -43,7 +43,7 @@ class BackpropagationNN:
                 self.INPUT_LAYER + 1)]) for j in range(self.HIDDEN_LAYER)]
         layer.append(input_to_hidden)
         hidden_to_output = [
-            Neuron([0 for i in range(
+            Neuron([random() for i in range(
                 self.HIDDEN_LAYER + 1)]) for j in range(self.OUTPUT_LAYER)]
         layer.append(hidden_to_output)
         self.net = layer
@@ -94,8 +94,7 @@ class BackpropagationNN:
             # print(inputs)
             for neuron in self.net[i]:
                 neuron.weight[-1] += self.LEARNING_RATE * neuron.delta
-                for weight_id in range(0, len(inputs)):
-                    # print(weight_id)
+                for weight_id in range(len(neuron.weight) - 1):
                     neuron.weight[weight_id] += self.LEARNING_RATE * (
                         neuron.delta - inputs[weight_id])
 
@@ -103,7 +102,6 @@ class BackpropagationNN:
         # print(self.net[0][0].weight)
         X_list = X_train.values.tolist()
         Y_list = [[x] for x in Y_train.values.tolist()]
-        fitness = 0
         for epoch in range(total_epoch):
             mape = 0
             for idx, data_row in enumerate(Y_list):
@@ -120,10 +118,9 @@ class BackpropagationNN:
                     (actual_value - forecasted_value) / actual_value)
                 # print("Mape sum: ", mape)
             mape = mape * 100 / len(Y_train)
-            fitness = 100 / (100 + mape)
-            print('epoch %s, MAPE %s, FITNESS %s' % (epoch, mape, fitness))
+            # print('epoch %s, MAPE %s, FITNESS %s' % (epoch, mape, fitness))
             # printNetworkWeight()
-        return fitness
+        return mape
 
     def predict(self, row):
         output = self.feedForward(row)
@@ -131,7 +128,6 @@ class BackpropagationNN:
 
     def data_testing(self, X_test, Y_test, max_value, min_value):
         X_test = X_test.values.tolist()
-        fitness = 0
         mape = 0
         for x, data_row in enumerate(Y_test):
             actual_value = un_normalized(Y_test.iloc[x], max_value, min_value)
@@ -140,25 +136,7 @@ class BackpropagationNN:
             # print('Test: ', actual_value, " ", forecasted_value)
             mape += abs((actual_value - forecasted_value) / actual_value)
             # print("Mape sum: ", mape)
-            mape = mape * 100 / len(Y_train)
-            fitness = 100 / (100 + mape)
-        print('MAPE %s, FITNESS %s' % (mape, fitness))
+        mape = mape * 100 / len(Y_test)
+        # print('MAPE %s' % (mape))
         # printNetworkWeight()
-        return fitness
-
-
-
-df = pd.DataFrame([list(i) for i in zip(*time_series_dataset)])
-
-X_train = df.iloc[0:90, :4]
-Y_train = df.iloc[0:90:, 4]
-X_test = df.iloc[71:80, :4]
-Y_test = df.iloc[71:80, 4]
-
-max_dataset = 1292.0
-min_dataset = 538.0
-
-backpp = BackpropagationNN(4, 3, 1, 0.4)
-backpp.initWeight()
-backpp.training(X_train, Y_train, max_dataset, min_dataset, 100)
-backpp.data_testing(X_test, Y_test, max_dataset, min_dataset)
+        return mape

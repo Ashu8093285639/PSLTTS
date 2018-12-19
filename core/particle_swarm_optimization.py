@@ -37,20 +37,13 @@ class Particle():
     XMIN = 0
 
     def __init__(self, particle_size):
-
         self.position = [(XMIN + random() * (
             XMAX - XMIN)) for i in range(particle_size)]
         self.velocity = [0 for i in range(particle_size)]
-        self.fitness = self.get_fitness(self.position)
+        self.set_fitness()
 
-    def get_fitness(particle_position):
-        # net = list()
-        # net = initWeightPSO(partikel)
-        # fitness = training(net, X_train, Y_train, 10)
-        fitness = 0
-        for val in particle_position:
-            fitness += val
-        return fitness
+    def set_fitness(self):
+        self.fitness = 0
 
 
 class ParticleSwarmOptimization():
@@ -92,9 +85,7 @@ class ParticleSwarmOptimization():
                 xnew = particle.position[partc_id_dimen] + vnew
                 updated_pops[partc_id].position[partc_id_dimen] = xnew
 
-            new_particle_fitness = self.get_fitness(
-                updated_pops[partc_id].position)
-            updated_pops[partc_id].fitness = new_particle_fitness
+            updated_pops[partc_id].set_fitness()
 
         self.pops = updated_pops
 
@@ -114,13 +105,11 @@ class ParticleSwarmOptimization():
             self.update_p_best()
             self.g_best = self.get_g_best()
             # print(p_best_pops)
-            print(self.g_best.position)
-            print(self.g_best.fitness)
+            # print(self.g_best.position)
+            print("-------------------------------------------------------")
+            print("t = ", (t + 1))
+            print("Global Best Position: ", self.g_best.position)
+            print("Global Best Particle Velocity: ", self.g_best.velocity)
+            print("Fitness: ", self.g_best.fitness)
+            print("-------------------------------------------------------")
             t += 1
-
-
-pso = ParticleSwarmOptimization(10, 10)
-pso.optimize(10)
-# pops = initPopulasi(1, 22)
-# p_best_pops = pops
-# g_best = update_g_best(p_best_pops)
