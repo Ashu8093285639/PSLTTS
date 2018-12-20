@@ -1,0 +1,9 @@
+skenario pengujian
+backpro
+- iterasi backpro
+
+pso
+- iterasi pso
+- pengujian jumlah partikel
+- kombinasi c1, c2
+- k velocity clamping
