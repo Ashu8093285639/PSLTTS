@@ -28,14 +28,6 @@ print(pd.DataFrame([list(i) for i in zip(*time_series_dataset)]))
 
 df = pd.DataFrame([list(i) for i in zip(*time_series_dataset)])
 
-X_train = df.iloc[0:10, :5]
-Y_train = df.iloc[0:10, 5]
-X_test = df.iloc[71:80, :5]
-Y_test = df.iloc[71:80, 5]
-
-max_dataset = 1292.0
-min_dataset = 538.0
-
 
 class BackpropagationPSO(BackpropagationNN):
             """docstring for BackpropagationPSO"""
@@ -84,7 +76,7 @@ class BackpropagationParticle(Particle):
         particle_position = self.position
         backPro = BackpropagationPSO(5, 3, 1, 0.4)
         backPro.initWeight(particle_position)
-        backPro.training(X_train, Y_train, max_dataset, min_dataset, 2)
+        backPro.training(X_train, Y_train, max_dataset, min_dataset, 4)
         mape = backPro.data_testing(
             X_test, Y_test, max_dataset, min_dataset)
         self.fitness = 100 / (100 + mape)
@@ -93,8 +85,8 @@ class BackpropagationParticle(Particle):
 
 class PSOxBackpro(ParticleSwarmOptimization):
 
-    def __init__(self, pop_size, particle_size):
-        super(PSOxBackpro, self).__init__(pop_size, particle_size)
+    def __init__(self, pop_size, particle_size, k):
+        super(PSOxBackpro, self).__init__(pop_size, particle_size, k)
         self.initPops(pop_size, particle_size)
 
     def initPops(self, pop_size, particle_size):
@@ -104,5 +96,22 @@ class PSOxBackpro(ParticleSwarmOptimization):
         self.g_best = self.get_g_best()
 
 
-pso_backpp = PSOxBackpro(10, 15)
-pso_backpp.optimize(10)
+X = df.iloc[:, :5]
+Y = df.iloc[:, 5]
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+
+max_dataset = 1292.0
+min_dataset = 538.0
+
+pso_backpp = PSOxBackpro(10, 15, 0.6)
+pso_backpp.optimize(100, 2, 1.5, 2.4)
+
+
+backPro = BackpropagationPSO(5, 3, 1, 0.4)
+backPro.initWeight([random() for i in range(15)])
+backPro.training(X_train, Y_train, max_dataset, min_dataset, 4)
+mape = backPro.data_testing(
+    X_test, Y_test, max_dataset, min_dataset)

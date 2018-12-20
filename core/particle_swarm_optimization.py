@@ -28,8 +28,6 @@ def position_clamping(xnew, xmin, xmax):
         return xnew
 
 
-VMIN, VMAX = velocity_boundary(0.6, XMIN, XMAX)
-
 
 class Particle():
 
@@ -48,8 +46,9 @@ class Particle():
 
 class ParticleSwarmOptimization():
 
-    def __init__(self, pop_size, particle_size):
+    def __init__(self, pop_size, particle_size, k):
         self.initPops(pop_size, particle_size)
+        self.VMAX, self.VMIN = velocity_boundary(k, XMIN, XMAX)
 
     def initPops(self, pop_size, particle_size):
         self.pops = [Particle(particle_size) for n in range(pop_size)]
@@ -78,7 +77,7 @@ class ParticleSwarmOptimization():
                 )
 
                 # update velocity
-                vnew = velocity_clamping(vnew, VMIN, VMAX)
+                vnew = velocity_clamping(vnew, self.VMIN, self.VMAX)
                 updated_pops[partc_id].velocity[partc_id_dimen] = vnew
 
                 # update position
@@ -95,12 +94,12 @@ class ParticleSwarmOptimization():
                 self.p_best[partc_id] = self.pops[partc_id]
         # print(p_best)
 
-    def optimize(self, tmax):
+    def optimize(self, tmax, w, c1, c2):
         t = 0
         while(t < tmax):
-            w = 0.4 + (0.9 - 0.4) * ((tmax - t) / tmax)
-            c1 = (0.5 - 2.5) * (t / tmax) + 2.5
-            c2 = (0.5 - 2.5) * (t / tmax) + 0.5
+            # w = 0.4 + (0.9 - 0.4) * ((tmax - t) / tmax)
+            # c1 = (0.5 - 2.5) * (t / tmax) + 2.5
+            # c2 = (0.5 - 2.5) * (t / tmax) + 0.5
             self.update_velocity_and_position(w, c1, c2)
             self.update_p_best()
             self.g_best = self.get_g_best()
