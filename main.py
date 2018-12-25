@@ -52,15 +52,15 @@ class BackpropagationPSO(BackpropagationNN):
                         partikel_dimens_idx += 1
                     # bias terletak di index akhir
                     # bias bisa diakses dengan index w[-1]
-                    w.append(bias)
+                    w.append(random())
                     input_to_hidden.append(Neuron(w))
+                layer.append(input_to_hidden)
 
                 hidden_to_output = list()
                 for i in range(self.OUTPUT_LAYER):
                     w = list()
-                    for j in range(self.HIDDEN_LAYER):
+                    for j in range(self.HIDDEN_LAYER + 1):
                         w.append(random())
-                    w.append(bias)
                     hidden_to_output.append(Neuron(w))
 
                 layer.append(hidden_to_output)
@@ -74,9 +74,9 @@ class BackpropagationParticle(Particle):
 
     def set_fitness(self):
         particle_position = self.position
-        backPro = BackpropagationPSO(5, 3, 1, 0.4)
+        backPro = BackpropagationPSO(5, 3, 1, 0.01)
         backPro.initWeight(particle_position)
-        backPro.training(X_train, Y_train, max_dataset, min_dataset, 4)
+        backPro.training(X_train, Y_train, max_dataset, min_dataset, 40)
         mape = backPro.data_testing(
             X_test, Y_test, max_dataset, min_dataset)
         self.fitness = 100 / (100 + mape)
@@ -85,7 +85,7 @@ class BackpropagationParticle(Particle):
 
 class PSOxBackpro(ParticleSwarmOptimization):
 
-    def __init__(self, pop_size, particle_size, k):
+    def __init__(self, pop_size, particle_size, k=None):
         super(PSOxBackpro, self).__init__(pop_size, particle_size, k)
         self.initPops(pop_size, particle_size)
 
