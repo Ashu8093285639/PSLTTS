@@ -25,6 +25,11 @@ class Particle():
 
 
 class ParticleSwarmOptimization():
+    """
+        ket: penggunaan self menunjukkan bahwa masing-masing
+        atribut akan disimpan pada object (sebagai variabel dalam class)
+        fungsinya hampir mirip 'this' pada java
+    """
 
     def __init__(self, pop_size, particle_size, k=None):
         """ Melakukan inisialisasi object PSO dengan parameter berapa jumlah populasi
@@ -34,9 +39,6 @@ class ParticleSwarmOptimization():
 
         nilai k akan disimpan pada variabel object PSO
 
-        ket: penggunaan self menunjukkan bahwa masing-masing
-        atribut akan disimpan pada object (sebagai variabel dalam class)
-        fungsinya hampir mirip 'this' pada java
         """
 
         self.initPops(pop_size, particle_size)
