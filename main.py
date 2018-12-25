@@ -96,22 +96,115 @@ class PSOxBackpro(ParticleSwarmOptimization):
         self.g_best = self.get_g_best()
 
 
-X = df.iloc[:, :5]
-Y = df.iloc[:, 5]
+X_train = df.iloc[:, :5]
+Y_train = df.iloc[:, 5]
+X_test = df.iloc[:, :5]
+Y_test = df.iloc[:, 5]
 
-from sklearn.model_selection import train_test_split
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+# from sklearn.model_selection import train_test_split
+# X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
 
 max_dataset = 1292.0
 min_dataset = 538.0
 
-pso_backpp = PSOxBackpro(10, 15, 0.6)
-pso_backpp.optimize(100, 2, 1.5, 2.4)
+# Pengujian Backpro
+
+fitness = ""
+epoch_parameter_test = [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300]
+
+for epoch in range(len(epoch_parameter_test)):
+    fitness += str(epoch_parameter_test[epoch]) + ", "
+    for i in range(10):
+       backpro = BackpropagationNN(5, 3, 1, 0.01)
+       backpro.initWeight()
+       backpro.training(
+           X, Y, max_dataset, min_dataset, epoch_parameter_test[epoch])
+       mape = backpro.data_testing(X, Y, max_dataset, min_dataset)
+       fitness += str((100 / (100 + mape))) + ", "
+    fitness += "\n"
+print()
+print(fitness)
 
 
-backPro = BackpropagationPSO(5, 3, 1, 0.4)
-backPro.initWeight([random() for i in range(15)])
-backPro.training(X_train, Y_train, max_dataset, min_dataset, 4)
-mape = backPro.data_testing(
-    X_test, Y_test, max_dataset, min_dataset)
+# Pengujian PSO
+
+g_best_fitness = ""
+average_fitness = ""
+
+Pengujian jumlah iterasi PSO
+iter_param_test = [5, 10, 15, 20, 25, 30, 35, 40, 45]
+for iterasi in range(len(iter_param_test)):
+    g_best_fitness += str(iter_param_test[iterasi]) + ", "
+    average_fitness += str(iter_param_test[iterasi]) + ", "
+    for i in range(10):
+        pso_backpp = PSOxBackpro(10, 15, 1)
+        gbest_fitness, avg_fitness = pso_backpp.optimize(
+            iter_param_test[iterasi], 1, 1, 1)
+        g_best_fitness += str(gbest_fitness) + ", "
+        average_fitness += str(avg_fitness) + ", "
+    g_best_fitness += "\n"
+    average_fitness += "\n"
+
+# Pengujian jumlah partikel PSO
+part_size_param_test = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+for part_size in range(len(part_size_param_test)):
+    g_best_fitness += str(part_size_param_test[part_size]) + ", "
+    average_fitness += str(part_size_param_test[part_size]) + ", "
+    for i in range(10):
+        pso_backpp = PSOxBackpro(part_size_param_test[part_size], 15, 1)
+        gbest_fitness, avg_fitness = pso_backpp.optimize(25, 1, 1, 1)
+        g_best_fitness += str(gbest_fitness) + ", "
+        average_fitness += str(avg_fitness) + ", "
+    g_best_fitness += "\n"
+    average_fitness += "\n"
+
+# Pengujian kombinasi nilai c1 dan c2
+c1 = [2.5, 2, 1.5, 1, 0.5]
+c2 = [0.5, 1, 1.5, 2, 2.5]
+for c_id in range(len(c1)):
+    g_best_fitness += str(c1[c_id]) + ":" + str(c2[c_id]) + ", "
+    average_fitness += str(c1[c_id]) + ":" + str(c2[c_id]) + ", "
+    for i in range(10):
+        pso_backpp = PSOxBackpro(40, 15, 1)
+        gbest_fitness, avg_fitness = pso_backpp.optimize(
+            25, 1, c1[c_id], c2[c_id])
+        g_best_fitness += str(gbest_fitness) + ", "
+        average_fitness += str(avg_fitness) + ", "
+    g_best_fitness += "\n"
+    average_fitness += "\n"
+
+# Pengujian nilai w
+w = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+for w_id in range(len(w)):
+    g_best_fitness += str(w[w_id]) + ", "
+    average_fitness += str(w[w_id]) + ", "
+    for i in range(10):
+        pso_backpp = PSOxBackpro(40, 15, 1)
+        gbest_fitness, avg_fitness = pso_backpp.optimize(
+            25, w[w_id], 2.5, 0.5)
+        g_best_fitness += str(gbest_fitness) + ", "
+        average_fitness += str(avg_fitness) + ", "
+    g_best_fitness += "\n"
+    average_fitness += "\n"
+
+
+# Pengujian nilai k-velocity clamping
+k = [0.2, 0.4, 0.6, 0.8, 1]
+for k_id in range(len(k)):
+    g_best_fitness += str(k[k_id]) + ", "
+    average_fitness += str(k[k_id]) + ", "
+    for i in range(10):
+        pso_backpp = PSOxBackpro(40, 15, k[k_id])
+        gbest_fitness, avg_fitness = pso_backpp.optimize(
+            25, 0.4, 2.5, 0.5)
+        g_best_fitness += str(gbest_fitness) + ", "
+        average_fitness += str(avg_fitness) + ", "
+    g_best_fitness += "\n"
+    average_fitness += "\n"
+
+# cetak hasil pengujian
+print("GBest Fitness")
+print(g_best_fitness)
+print("Average Fitness")
+print(average_fitness)
