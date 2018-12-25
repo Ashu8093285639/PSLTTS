@@ -150,3 +150,13 @@ class BackpropagationNN:
         # print('MAPE %s' % (mape))
         # printNetworkWeight()
         return mape
+
+
+# Contoh penggunaan class Backpropagation
+backpp = BackpropagationNN(5, 5, 1, 0.5)
+backpp.initWeight()
+backpp.training(
+    data_training, output_data_training, nilai_maksimal_dataset, nilai_minimal_dataset, epoch)
+nilai_mape = backpp.data_testing(
+    data_testing, output_data_testing, nilai_maksimal_dataset, nilai_minimal_dataset)
+fitness = 100 / (100 + nilai_mape)

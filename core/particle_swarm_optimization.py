@@ -103,5 +103,12 @@ class ParticleSwarmOptimization():
             print("Global Best Position: ", self.g_best.position)
             print("Global Best Particle Velocity: ", self.g_best.velocity)
             print("Fitness: ", self.g_best.fitness)
+            print("Average Fitness: ", self.get_average_fitness())
             print("-------------------------------------------------------")
             t += 1
+        return self.g_best.fitness, self.get_average_fitness()
+
+
+# Contoh penggunaan class particle swarm optimization
+pso = ParticleSwarmOptimization(10, 10, 1)
+pso.optimize(10, 1, 5, 1)
