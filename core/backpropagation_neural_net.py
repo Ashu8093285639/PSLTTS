@@ -251,8 +251,8 @@ class BackpropagationNN:
             perhitungan nilai mape (karena perhitungan nilai mape
             harus menggunakan data yang tidak dinormalisasi)
 
-            Proses training menggunakan data input (X_test)
-            dan output (Y_test)
+            Proses testing menggunakan data input (X_test)
+            dan output (Y_test). Hasil testing berupa nilai mape
         """
         X_test = X_test.values.tolist()
         mape = 0
