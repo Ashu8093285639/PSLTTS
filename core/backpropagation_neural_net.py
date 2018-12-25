@@ -23,6 +23,16 @@ class BackpropagationNN:
         self.OUTPUT_LAYER = output_layer
         self.LEARNING_RATE = learning_rate
 
+    def __str__(self):
+        str_buff = ""
+        str_buff += "Input to Hidden\n"
+        for neuron in self.net[0]:
+            str_buff += str(neuron.weight) + "\n"
+        str_buff += "Hidden to Output\n"
+        for neuron in self.net[1]:
+            str_buff += str(neuron.weight) + "\n"
+        return str_buff
+
     def summingFunction(self, last_weight, training_data):
         bias = last_weight[-1]  # bias on last index
         y_in = 0
