@@ -1,42 +1,10 @@
 from random import random
 
-XMIN = 0
-XMAX = 1
-
-
-def velocity_boundary(k, xmin, xmax):
-    vmax = k * (xmax - xmin) / 2
-    vmin = -1 * vmax
-    return (vmin, vmax)
-
-
-def velocity_clamping(vnew, vmin, vmax):
-    if(vnew > vmax):
-        return vmax
-    elif(vnew < vmin):
-        return vmin
-    else:
-        return vnew
-
-
-def position_clamping(xnew, xmin, xmax):
-    if(xnew > xmax):
-        return xmax
-    elif(xnew < xmin):
-        return xmin
-    else:
-        return xnew
-
-
 
 class Particle():
 
-    XMAX = 1
-    XMIN = 0
-
     def __init__(self, particle_size):
-        self.position = [(XMIN + random() * (
-            XMAX - XMIN)) for i in range(particle_size)]
+        self.position = [random() for i in range(particle_size)]
         self.velocity = [0 for i in range(particle_size)]
         self.set_fitness()
 
@@ -46,9 +14,9 @@ class Particle():
 
 class ParticleSwarmOptimization():
 
-    def __init__(self, pop_size, particle_size, k):
+    def __init__(self, pop_size, particle_size, k=None):
         self.initPops(pop_size, particle_size)
-        self.VMAX, self.VMIN = velocity_boundary(k, XMIN, XMAX)
+        self.k = k
 
     def initPops(self, pop_size, particle_size):
         self.pops = [Particle(particle_size) for n in range(pop_size)]
@@ -57,9 +25,21 @@ class ParticleSwarmOptimization():
 
     def get_g_best(self):
         p_best_sorted = self.p_best
-        p_best_sorted = sorted(
-            p_best_sorted, key=lambda partc: partc.fitness, reverse=True)
+        p_best_sorted.sort(key=lambda x: x.fitness, reverse=True)
         return p_best_sorted[0]
+
+    def velocity_clamping(self, vnew):
+        if self.k is None:
+            return vnew
+        else:
+            vmax = self.k * (1 - 0) / 2
+            vmin = -1 * vmax
+            if(vnew > vmax):
+                return vmax
+            elif(vnew < vmin):
+                return vmin
+            else:
+                return vnew
 
     def update_velocity_and_position(self, w, c1, c2):
         updated_pops = self.pops
@@ -75,9 +55,11 @@ class ParticleSwarmOptimization():
                     (self.g_best.position[partc_id_dimen] -
                         particle.position[partc_id_dimen])
                 )
+                # print(vnew)
 
                 # update velocity
-                vnew = velocity_clamping(vnew, self.VMIN, self.VMAX)
+                if self.k is not None:
+                    vnew = self.velocity_clamping(vnew)
                 updated_pops[partc_id].velocity[partc_id_dimen] = vnew
 
                 # update position
