@@ -76,8 +76,19 @@ class ParticleSwarmOptimization():
                 self.p_best[partc_id] = self.pops[partc_id]
         # print(p_best)
 
+    def get_average_fitness(self):
+        sum_fitness = 0
+        for partc in self.pops:
+            sum_fitness += partc.fitness
+        return sum_fitness / len(self.pops)
+
     def optimize(self, tmax, w, c1, c2):
         t = 0
+        print("Popsize: ", len(self.pops), ", Itermax: ", tmax)
+        print("w: ", w, ", c1: ", c1, ", c2: ", c2)
+        print("k: ", self.k)
+        for p in self.pops:
+            print(p.fitness)
         while(t < tmax):
             # w = 0.4 + (0.9 - 0.4) * ((tmax - t) / tmax)
             # c1 = (0.5 - 2.5) * (t / tmax) + 2.5
