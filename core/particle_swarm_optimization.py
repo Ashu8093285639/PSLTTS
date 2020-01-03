@@ -6,20 +6,20 @@ class Particle():
     def __init__(self, particle_size):
         self.position = [random() for i in range(particle_size)]
         self.velocity = [0 for i in range(particle_size)]
-        self.set_fitness()
+        self.calculate_fitness()
 
-    def set_fitness(self):
+    def calculate_fitness(self):
         self.fitness = 0
 
 
 class ParticleSwarmOptimization():
 
     def __init__(self, pop_size, particle_size, k=None):
-        self.initPops(pop_size, particle_size)
         self.k = k
+        self.pop_size, self.particle_size = pop_size, particle_size
 
-    def initPops(self, pop_size, particle_size):
-        self.pops = [Particle(particle_size) for n in range(pop_size)]
+    def initPops(self):
+        self.pops = [Particle(self.particle_size) for n in range(self.pop_size)]
         self.p_best = self.pops
         self.g_best = self.get_g_best()
 
@@ -64,7 +64,7 @@ class ParticleSwarmOptimization():
                 xnew = particle.position[partc_id_dimen] + vnew
                 updated_pops[partc_id].position[partc_id_dimen] = xnew
 
-            updated_pops[partc_id].set_fitness()
+            updated_pops[partc_id].calculate_fitness()
 
         # mengganti partikel yang lama dengan partikel yang telah diupdate
         self.pops = updated_pops
@@ -82,23 +82,23 @@ class ParticleSwarmOptimization():
 
     def optimize(self, tmax, w, c1, c2):
         t = 0   # t awal diset ke 0
-        print("Popsize: ", len(self.pops), ", Itermax: ", tmax)
-        print("w: ", w, ", c1: ", c1, ", c2: ", c2)
-        print("k: ", self.k)
+        # print("Popsize: ", len(self.pops), ", Itermax: ", tmax)
+        # print("w: ", w, ", c1: ", c1, ", c2: ", c2)
+        # print("k: ", self.k)
 
-        for p in self.pops:
-            print(p.fitness)
+        # for p in self.pops:
+        #     print(p.fitness)
 
         while(t < tmax):
             self.update_velocity_and_position(w, c1, c2)
             self.update_p_best()
             self.g_best = self.get_g_best()
-            print("-------------------------------------------------------")
-            print("t = ", (t + 1))
-            print("Global Best Position: ", self.g_best.position)
-            print("Global Best Particle Velocity: ", self.g_best.velocity)
-            print("Fitness: ", self.g_best.fitness)
-            print("Average Fitness: ", self.get_average_fitness())
-            print("-------------------------------------------------------")
+            # print("-------------------------------------------------------")
+            # print("t = ", (t + 1))
+            # print("Global Best Position: ", self.g_best.position)
+            # print("Global Best Particle Velocity: ", self.g_best.velocity)
+            # print("Global Best Fitness: ", self.g_best.fitness)
+            # print("Average Fitness: ", self.get_average_fitness())
+            # print("-------------------------------------------------------")
             t += 1
         return self.g_best.fitness, self.get_average_fitness()
