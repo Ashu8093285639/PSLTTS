@@ -75,9 +75,8 @@ As we can see on text above, Backpropagation using 5 input layer and 3 hidden la
 - PSO c1 & c2 Value Combination
   ![Control Variable: t_max=25, pop_size=40, w=1, k=1](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/c_value_test.png)  
   
-  ```text
-  Note: 0 value is representation for combination of 2.5;0.5 c-value pair. So does next for other value until 0.5;2.5 c-value pair.
-  ```
+  Note: 0 value is representation for combination of 2.5;0.5 c-value pair. So does next for other value until the value is 4, which is 0.5;2.5 c-value pair.
+  
 - PSO w Value
   ![Control Variable: t_max=25, pop_size=40, c1=0.4, c2=2.5, k=1](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/w_value_test.png)  
 - PSO K-Velocity Clamping
