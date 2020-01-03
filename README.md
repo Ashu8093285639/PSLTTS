@@ -28,13 +28,13 @@ prediction-using-backpropagation-pso/
 
 Backpropagation is one of neural network algortihm for supervised learning. The difference betwwen a normal Multi-Layer Perceptron are Backpropagation use Gradient-descent as learning error minimalization passed backward from output back to input layer. As usual Multi-Layer Perceptron algorithm, Backpropagation is using a random initial weight before training progress started. Because using a random initial value, the result of Backpropagation are varying. They can produce a good accuracy value if algorithm find the global optima or low accuracy id algorithm stuck in local optima.
 
-Particle Swarm Optimization (PSO) is one of optimization algorithm that mimics the group of bird movement. A bird in group of bird will try to gather some information of food position. Then they're share an food position information each other. Same as group of bird, PSO using some solution set (known as particle) to run some fitness function. One of the best particle (which is the highest fitness) will be an information to other particle to start finding solution.
+Particle Swarm Optimization (PSO) is one of optimization algorithm that mimics the group of bird movement. A bird in group of bird will try to gather some information of food position. Then they're share a food position information each other. Same as group of bird, PSO using some solution set (known as particle) to run some fitness function. One of the best particle (which is the highest fitness) will be an information to other particle to start finding solution.
 
 In this project, PSO will help to find a best initial weight of Backpropagation. So, this project expect to make PSO can give a result that close to global optima.
 
 ## How to Read The Code
 
-The `backpropagation_neural_net.py` and `particle_swarm_optimization.py` files in directory `core/` are the general class of both algorithm. The `main.py` is custom implementation from `core` to make PSO can optimize the Backpropagation. So, the `main.py` file is combination between both algorithm in `core/` directory.
+The `backpropagation_neural_net.py` and `particle_swarm_optimization.py` files in directory `core/` are the general class of both algorithm. The `main.py` is custom implementation from `core/` to make PSO can optimize the Backpropagation. So, the `main.py` file is combination between both algorithm in `core/` directory.
 
 Using method overriding from parent class in `core/` directory. Here is the following modified method to make PSO can optimize Backpropagation (file: `main.py`):
 
@@ -69,14 +69,35 @@ As we can see on text above, Backpropagation using 5 input layer and 3 hidden la
 ## Result
 
 - PSO Max Iteration
-  ![Control Variable: pop_size=10, c1=1, c2=1, w=1, k=1]()
+  ![Control Variable: pop_size=10, c1=1, c2=1, w=1, k=1](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/iter_test.png)
 - PSO Particle Pop Size
-  ![Control Variable: t_max=25, c1=1, c2=1, w=1, k=1]()  
+  ![Control Variable: t_max=25, c1=1, c2=1, w=1, k=1](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/par_pop_size_test.png)  
 - PSO c1 & c2 Value Combination
-  ![Control Variable: t_max=25, pop_size=40, w=1, k=1]()  
-- PSO w Value
-  ![Control Variable: t_max=25, pop_size=40, c1=0.4, c2=2.5, k=1]()  
-- PSO K-Velocity Clamping
-  ![Control Variable: t_max=25, pop_size=40, c1=0.4, c2=2.5, w=0.5]()
+  ![Control Variable: t_max=25, pop_size=40, w=1, k=1](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/c_value_test.png)  
   
+  ```text
+  Note: 0 value is representation for combination of 2.5;0.5 c-value pair. So does next for other value until 0.5;2.5 c-value pair.
+  ```
+- PSO w Value
+  ![Control Variable: t_max=25, pop_size=40, c1=0.4, c2=2.5, k=1](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/w_value_test.png)  
+- PSO K-Velocity Clamping
+  ![Control Variable: t_max=25, pop_size=40, c1=0.4, c2=2.5, w=0.5](https://github.com/desenfirman/prediction-using-backpropagation-pso/raw/master/result/k_value_test.png)
+ 
+Best PSO param from HyperParameter test is:
+```
+t           =   25
+pop_size    =   40
+c1 & c2     =   2.5;0.5
+w           =   0.4
+k           =   1
+```
+
 Full testing code is in jupyter notebook `test_case.ipynb`.
+
+## By
+
+```text
+1. Ageng Wibowo             155150200111269
+2. Dese Narfa Firmansyah    155150201111153
+3. Fanny Aulia Dewi         155150201111070
+```
